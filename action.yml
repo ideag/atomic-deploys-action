@@ -1,0 +1,67 @@
+name: 'Hello World'
+description: 'Greet someone'
+inputs:
+  host:  # id of input
+    description: 'SSH server hostname'
+    required: true
+  username:  # id of input
+    description: 'SSH server username'
+    required: true
+  key:  # id of input
+    description: 'SSH server passkey'
+    required: true
+  port:
+    description: 'SSH server port'
+    default: 22
+  dir:
+    description: 'Target directory'
+    required: true
+outputs:
+  stdout:
+    description: 'Standard output of the executed commands.'
+    value: ${{ steps.entrypoint.outputs.stdout }}
+runs:
+  using: "composite"
+  steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    - name: backup old version
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ inputs.host }}
+        username: ${{ inputs.username }}
+        key: ${{ inputs.key }}
+        port: ${{ inputs.port }}
+        script: |
+          mkdir -p ${{ inputs.dir }}
+          rm -rd ${{ inputs.dir }}/old
+          cp -r ${{ inputs.dir }}/current ${{ inputs.dir }}/old
+    - name: copy file to server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ inputs.host }}
+        username: ${{ inputs.username }}
+        key: ${{ inputs.key }}
+        port: ${{ inputs.port }}
+        source: "**,!.git,!.github"
+        target: ${{ inputs.dir }}/new
+    - name: rotate version
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ inputs.host }}
+        username: ${{ inputs.username }}
+        key: ${{ inputs.key }}
+        port: ${{ inputs.port }}
+        script: |
+          echo ${{ github.run_number }} > ${{ inputs.dir }}/new/version.txt
+          rm -rd ${{ inputs.dir }}/current
+          cp -r ${{ inputs.dir }}/new ${{ inputs.dir }}/current
+    - name: remove new
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ inputs.host }}
+        username: ${{ inputs.username }}
+        key: ${{ inputs.key }}
+        port: ${{ inputs.port }}
+        script: |
+          rm -rd ${{ inputs.dir }}/new
