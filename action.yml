@@ -69,7 +69,7 @@ runs:
       id: yaml-action
       uses: teunmooij/yaml@v1
       with:
-        from-file: '${{ github.workspace }}/config.yml'
+        from-file: 'config.yml'
     - name: Use data
       shell: bash
       run: echo "Data ${{ steps.yaml-action.outputs.data }}"
