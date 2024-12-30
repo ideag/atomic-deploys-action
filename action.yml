@@ -73,7 +73,10 @@ runs:
     - name: use config
       shell: bash
       run: |
-        echo ${{ steps.read_config.outputs['links.0.source']}} ${{ steps.read_config.outputs['links.0.target']}}
+        foreach item ( ${{ steps.read_config.outputs['links']}} ) 
+          echo $item.source
+        end
+    # echo ${{ steps.read_config.outputs['links.0.source']}} ${{ steps.read_config.outputs['links.0.target']}}
     # - name: use config
     #   uses: appleboy/ssh-action@v1.2.0
     #   with:
@@ -83,4 +86,3 @@ runs:
     #     port: ${{ inputs.port }}
     #     script: |
     #       echo ${{ steps.read_config.links[0].source}} ${{ steps.read_config.links[0].target}}
-    
