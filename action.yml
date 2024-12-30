@@ -81,7 +81,8 @@ runs:
         
         for key in "${!arr[@]}"
         do
-            echo "key  : $key"
+            source="${{ inputs.dir }}/$key"
+            echo "source: $source"
             echo "value: ${arr[$key]}"
         done
       
