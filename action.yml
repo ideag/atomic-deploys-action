@@ -65,12 +65,8 @@ runs:
         port: ${{ inputs.port }}
         script: |
           rm -rd ${{ inputs.dir }}/new
-    - name: Read yaml # use the action to read yaml
-      id: yaml-action
-      uses: teunmooij/yaml@v1
-      with:
-        from-file: 'config.yml'
     - name: Use data
+      id: symlinks
       shell: bash
       run: |
         declare -A arr
@@ -79,17 +75,29 @@ runs:
             arr[$key]="$value"
         done < <(yq e '.links[] | (.source + "@" + .target)' config.yml)
         
+        declare -A symlinks
         for key in "${!arr[@]}"
         do
             source="${{ inputs.dir }}/$key"
-            parent=realpath ${{ inputs.dir }}/..
-            target="$parent/${arr[$key]}"
+            target="${{ inputs.dir }}/${arr[$key]}"
             # echo ([[ -d $target ]])
             # [[ -d $target ]] || ln -s $source $target
             echo "source: $source"
             echo "target: $target"
+            symlinks[$source]=$target
         done
-      
+        echo "SYMLINKS=toJSON($symlinks)" >> $GITHUB_OUTPUT
+    - name: setup symlinks
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ inputs.host }}
+        username: ${{ inputs.username }}
+        key: ${{ inputs.key }}
+        port: ${{ inputs.port }}
+        script: |
+        echo ${{ steps.symlinks.outputs.symlinks }}
+        # rm -rd ${{ inputs.dir }}/new
+        
         # typeset -A items
         # while IFS== read -r key value; do
         #   [ -n "$key" ] && items["$key"]="$value"
