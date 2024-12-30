@@ -121,6 +121,12 @@ runs:
         port: ${{ inputs.port }}
         script: |
           echo -e "symlinks \n${{ steps.symlinks.outputs.symlinks }}"
+          symlinks = ${{ steps.symlinks.outputs.symlinks }}
+          
+          IFS="|||" read -ra parts <<< "$symlinks"
+          for part in "${parts[@]}"; do
+            echo "$part"
+          done
         # symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
         # for key in "${!symlinks[@]}"; do
         #   value="${symlinks[$key]}"
