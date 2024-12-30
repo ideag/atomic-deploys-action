@@ -120,13 +120,14 @@ runs:
         key: ${{ inputs.key }}
         port: ${{ inputs.port }}
         script: |
-          echo ${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
-          symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
-          for key in "${!symlinks[@]}"
-          do
-            echo "key  : $key"
-            echo "value: ${symlinks[$key]}"
-          done
+          echo "Associative array JSON: $symlinks"
+        # echo ${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
+        # symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
+        # for key in "${!symlinks[@]}"
+        # do
+        #   echo "key  : $key"
+        #   echo "value: ${symlinks[$key]}"
+        # done
         # rm -rd ${{ inputs.dir }}/new
         # typeset -A items
         # while IFS== read -r key value; do
