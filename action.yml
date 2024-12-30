@@ -120,7 +120,9 @@ runs:
         key: ${{ inputs.key }}
         port: ${{ inputs.port }}
         script: |
-          echo "Associative array JSON: $symlinks"
+          echo "Associative array JSON: ${{ steps.symlinks.outputs.symlinks }}"
+          my_array_json=$(echo "${{ steps.symlinks.outputs.symlinks }}" | fromJSON)
+          echo $my_array_json
         # echo ${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
         # symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
         # for key in "${!symlinks[@]}"
