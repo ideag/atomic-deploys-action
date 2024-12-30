@@ -112,35 +112,6 @@ runs:
         data+="}"
         echo $data
         echo "symlinks='$data'" >> $GITHUB_OUTPUT      
-      # data=$(printf "%s\n" "${!symlinks[@]}" | jq -n 'reduce inputs as $key ( {}; . + {($key): ($ARGS.named[$key] | @json)} )' --args "${!symlinks[@]}" "${symlinks[@]}")
-      # echo $data
-      # echo "symlinks=$data" >> $GITHUB_OUTPUT      
-
-      #   data='{}'
-  
-      #   for i in "${!symlinks[@]}"
-      #   do
-      #       data=$(jq -n --arg data "$data" \
-      #                    --arg key "$i"     \
-      #                    --arg value "${symlinks[$i]}" \
-      #                    '$data | fromjson + { ($key) : ($value) }')
-      #   done
-      #   echo $data
-
-      #   data = $( jq -n --arg rec $(bash -c '$1' -- $data) '$ARGS.named' )
-      #   echo $data
-      #   echo "symlinks=`$data`" >> $GITHUB_OUTPUT      
-      # # data='{}'
-
-      # for i in "${!symlinks[@]}"
-      # do
-      #     data=$(jq -n --arg data "$data" \
-      #                  --arg key "$i"     \
-      #                  --arg value "${symlinks[$i]}" \
-      #                  '$data | fromjson + { ($key) : ($value) }')
-      # done
-      # echo $data
-      # data=$(jq -n)
     - name: setup symlinks
       uses: appleboy/ssh-action@v1.2.0
       with:
@@ -149,13 +120,13 @@ runs:
         key: ${{ inputs.key }}
         port: ${{ inputs.port }}
         script: |
-          echo ${{ steps.symlinks.outputs.symlinks }}
-          # symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
-          # for key in "${!symlinks[@]}"
-          # do
-          #   echo "key  : $key"
-          #   echo "value: ${symlinks[$key]}"
-          # done
+          echo ${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
+          symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
+          for key in "${!symlinks[@]}"
+          do
+            echo "key  : $key"
+            echo "value: ${symlinks[$key]}"
+          done
         # rm -rd ${{ inputs.dir }}/new
         # typeset -A items
         # while IFS== read -r key value; do
