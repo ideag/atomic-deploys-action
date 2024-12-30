@@ -87,11 +87,29 @@ runs:
             symlinks[$source]=$target
         done
 
-        data=$(printf "%s\n" "${!symlinks[@]}" | jq -n '
-          reduce inputs as $key (
-            {};
-            . + {($key): $ARGS.named[$key]}
-          )' --args "${!symlinks[@]}" "${symlinks[@]}")
+        data="{"
+        
+        # Iterate through the associative array to build the JSON string
+        first=1
+        for key in "${!symlinks[@]}"; do
+            if [ $first -eq 1 ]; then
+                first=0
+            else
+                data+=","
+            fi
+        
+            # Get the value from the array
+            value="${symlinks[$key]}"
+        
+            # Escape quotes in the value using jq (for safe JSON encoding)
+            escaped_value=$(echo "$value" | jq -Rs .)
+        
+            # Add the key-value pair to the JSON object
+            data+="\"$key\":$escaped_value"
+        done
+        
+        # Close the JSON object
+        data+="}"
         echo $data
       # data=$(printf "%s\n" "${!symlinks[@]}" | jq -n 'reduce inputs as $key ( {}; . + {($key): ($ARGS.named[$key] | @json)} )' --args "${!symlinks[@]}" "${symlinks[@]}")
       # echo $data
