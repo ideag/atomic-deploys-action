@@ -111,6 +111,7 @@ runs:
         # Close the JSON object
         data+="}"
         echo $data
+        echo "symlinks='$data'" >> $GITHUB_OUTPUT      
       # data=$(printf "%s\n" "${!symlinks[@]}" | jq -n 'reduce inputs as $key ( {}; . + {($key): ($ARGS.named[$key] | @json)} )' --args "${!symlinks[@]}" "${symlinks[@]}")
       # echo $data
       # echo "symlinks=$data" >> $GITHUB_OUTPUT      
