@@ -75,9 +75,10 @@ runs:
       run: |
         typeset -A items
         while IFS== read -r key value; do
-          echo "$key $value";
-          # items["$key"]="$value"
+          items["$key"]="$value"
         done < <(yq -r '.links | to_entries | .[] | .source + "=" + .target ' config.yml)
+        typeset -p items
+        printf "%s\n" "${items[@]}"
     #    echo '${{ steps.yaml-action.outputs.data }}' | jq '.links[] | .source, .target' | xargs -n2 echo $1 | ( read source target; echo "Source:$source Target:$target" )
     #    echo "{\"links\":[{\"a\":\"b\",\"c\":\"d\"},{\"e\":\"b\",\"f\":\"d\"}]}" | jq '.links[] | @sh'
     #   echo "${{ steps.yaml-action.outputs.data }}" | jq '.links[]'
