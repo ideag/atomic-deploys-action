@@ -86,7 +86,7 @@ runs:
             echo "target: $target"
             symlinks[$source]=$target
         done
-        data = $( jq -c -n '$ARGS.named' --args "${symlinks[@]} )
+        data = $( jq -c -n '$ARGS.named' --args "${symlinks} )
         echo $data
         echo "symlinks=`$data`" >> $GITHUB_OUTPUT      
       # data='{}'
