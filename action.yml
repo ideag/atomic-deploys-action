@@ -73,8 +73,8 @@ runs:
     - name: Use data
       shell: bash
       run: |
-        echo '{"key":[{"test":"this"},{"another":"other is"}]}' | jq '.key'
-        echo "Data ${{ steps.yaml-action.outputs.data }}"
+        echo "${{ steps.yaml-action.outputs.data }}" | jq '.links'
+    #    echo "Data ${{ steps.yaml-action.outputs.data }}"
     # - name: read config
     #   uses: pietrobolcato/action-read-yaml@1.1.0
     #   id: read_config
