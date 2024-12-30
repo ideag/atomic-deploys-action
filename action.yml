@@ -73,7 +73,7 @@ runs:
     - name: use config
       shell: bash
       run: |
-        echo ${{ steps.read_config.outputs[links][0].source}} ${{ steps.read_config.outputs[links][0].target}}
+        echo ${{ steps.read_config.outputs[links.0.source]}} ${{ steps.read_config.outputs[links.0.target]}}
     # - name: use config
     #   uses: appleboy/ssh-action@v1.2.0
     #   with:
