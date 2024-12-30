@@ -82,7 +82,7 @@ runs:
         for key in "${!arr[@]}"
         do
             source="${{ inputs.dir }}/$key"
-            parent=realpath "${{ inputs.dir }}/.."
+            parent=realpath ${{ inputs.dir }}/..
             target="$parent/${arr[$key]}"
             # echo ([[ -d $target ]])
             # [[ -d $target ]] || ln -s $source $target
