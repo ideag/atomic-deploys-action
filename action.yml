@@ -97,7 +97,7 @@ runs:
         done
         echo $data
 
-        data = $( jq -n --arg rec "'"$data"'" '$ARGS.named' )
+        data = $( jq -n --arg rec $(bash -c '$1' -- $data) '$ARGS.named' )
         echo $data
         echo "symlinks=`$data`" >> $GITHUB_OUTPUT      
       # data='{}'
