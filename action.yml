@@ -86,8 +86,18 @@ runs:
             echo "target: $target"
             symlinks[$source]=$target
         done
-        echo $(jq --compact-output --null-input '$ARGS.positional' --args -- "${symlinks[@]}")
-        echo "symlinks=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${symlinks[@]}")" >> $GITHUB_OUTPUT      
+
+        data='{}'
+
+        for i in "${!symlinks[@]}"
+        do
+            data=$(jq -n --arg data "$data" \
+                         --arg key "$i"     \
+                         --arg value "${symlinks[$i]}" \
+                         '$data | fromjson + { ($key) : ($value) }')
+        done
+        echo $data
+        echo "symlinks=$data" >> $GITHUB_OUTPUT      
       # echo $( jq -c -n '$ARGS.positional' --args "${symlinks[@]} )
     - name: setup symlinks
       uses: appleboy/ssh-action@v1.2.0
