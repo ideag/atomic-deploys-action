@@ -121,7 +121,7 @@ runs:
         port: ${{ inputs.port }}
         script: |
           echo ${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
-          symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
+          symlinks=${{ fromJSON( fromJSON( steps.symlinks.outputs.symlinks ) ) }}
           for key in "${!symlinks[@]}"
           do
             echo "key  : $key"
