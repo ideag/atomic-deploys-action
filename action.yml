@@ -72,7 +72,9 @@ runs:
         from-file: 'config.yml'
     - name: Use data
       shell: bash
-      run: echo "Data ${{ steps.yaml-action.outputs.data[0] }}"
+      run: |
+        echo '{"key":"value"}' | jq '.key'
+        echo "Data ${{ steps.yaml-action.outputs.data }}"
     # - name: read config
     #   uses: pietrobolcato/action-read-yaml@1.1.0
     #   id: read_config
