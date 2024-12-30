@@ -71,6 +71,7 @@ runs:
       with:
         from-file: '${{ github.workspace }}/config.yml'
     - name: Use data
+      shell: bash
       run: echo "Data ${{ steps.yaml-action.outputs.data }}"
     # - name: read config
     #   uses: pietrobolcato/action-read-yaml@1.1.0
