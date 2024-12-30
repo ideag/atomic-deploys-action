@@ -95,9 +95,8 @@ runs:
         key: ${{ inputs.key }}
         port: ${{ inputs.port }}
         script: |
-        echo ${{ steps.symlinks.outputs.symlinks }}
+          echo ${{ steps.symlinks.outputs.symlinks }}
         # rm -rd ${{ inputs.dir }}/new
-        
         # typeset -A items
         # while IFS== read -r key value; do
         #   [ -n "$key" ] && items["$key"]="$value"
