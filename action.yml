@@ -75,7 +75,7 @@ runs:
       run: |
         typeset -A items
         while IFS== read -r key value; do
-          items["$key"]="$value"
+          [ -n "$key" ] && items["$key"]="$value"
         done < <(echo '${{ steps.yaml-action.outputs.data }}' | jq -r '.links | to_entries | .[] | .source + "=" + .target ')
         typeset -p items
         printf "%s\n" "${items[@]}"
