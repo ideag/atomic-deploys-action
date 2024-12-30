@@ -73,7 +73,7 @@ runs:
     - name: use config
       shell: bash
       run: |
-        foreach item ( ${{ steps.read_config.outputs['links']}} ) 
+        foreach item ( ${{ steps.read_config.outputs['links.array']}} ) 
           echo $item.source
         end
     # echo ${{ steps.read_config.outputs['links.0.source']}} ${{ steps.read_config.outputs['links.0.target']}}
