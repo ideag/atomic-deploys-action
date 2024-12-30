@@ -86,21 +86,30 @@ runs:
             echo "target: $target"
             symlinks[$source]=$target
         done
-        data='{}'
-  
-        for i in "${!symlinks[@]}"
-        do
-            data=$(jq -n --arg data "$data" \
-                         --arg key "$i"     \
-                         --arg value "${symlinks[$i]}" \
-                         '$data | fromjson + { ($key) : ($value) }')
-        done
-        echo $data
 
-        data = $( jq -n --arg rec $(bash -c '$1' -- $data) '$ARGS.named' )
+        data=$(printf "%s\n" "${!symlinks[@]}" | jq -n '
+        reduce inputs as $key (
+          {};
+          . + {($key): ($ARGS.named[$key] | @json)}
+        )' --args "${!symlinks[@]}" "${symlinks[@]}")
         echo $data
-        echo "symlinks=`$data`" >> $GITHUB_OUTPUT      
-      # data='{}'
+        echo "symlinks=$data" >> $GITHUB_OUTPUT      
+
+      #   data='{}'
+  
+      #   for i in "${!symlinks[@]}"
+      #   do
+      #       data=$(jq -n --arg data "$data" \
+      #                    --arg key "$i"     \
+      #                    --arg value "${symlinks[$i]}" \
+      #                    '$data | fromjson + { ($key) : ($value) }')
+      #   done
+      #   echo $data
+
+      #   data = $( jq -n --arg rec $(bash -c '$1' -- $data) '$ARGS.named' )
+      #   echo $data
+      #   echo "symlinks=`$data`" >> $GITHUB_OUTPUT      
+      # # data='{}'
 
       # for i in "${!symlinks[@]}"
       # do
