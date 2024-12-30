@@ -77,7 +77,7 @@ runs:
         while IFS="@" read -r key value
         do
             arr[$key]="$value"
-        done < <(yq e '.links[] | (.source + "@" + .target)' config.yaml)
+        done < <(yq e '.links[] | (.source + "@" + .target)' config.yml)
         
         for key in "${!arr[@]}"
         do
