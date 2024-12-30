@@ -65,17 +65,24 @@ runs:
         port: ${{ inputs.port }}
         script: |
           rm -rd ${{ inputs.dir }}/new
-    - name: read config
-      uses: pietrobolcato/action-read-yaml@1.1.0
-      id: read_config
+    - name: Read yaml # use the action to read yaml
+      id: yaml-action
+      uses: teunmooij/yaml@v1
       with:
-        config: ${{ github.workspace }}/config.yml
-    - name: use config
-      shell: bash
-      run: |
-        foreach item ( ${{ steps.read_config.outputs['links.array']}} ) 
-          echo $item.source
-        end
+        from-file: '${{ github.workspace }}/config.yml'
+    - name: Use data
+      run: echo "Data ${{ steps.yaml-action.outputs.data }}"
+    # - name: read config
+    #   uses: pietrobolcato/action-read-yaml@1.1.0
+    #   id: read_config
+    #   with:
+    #     config: ${{ github.workspace }}/config.yml
+    # - name: use config
+    #   shell: bash
+    #   run: |
+    #     foreach item ( ${{ steps.read_config.outputs['links.array']}} ) 
+    #       echo $item.source
+    #     end
     # echo ${{ steps.read_config.outputs['links.0.source']}} ${{ steps.read_config.outputs['links.0.target']}}
     # - name: use config
     #   uses: appleboy/ssh-action@v1.2.0
