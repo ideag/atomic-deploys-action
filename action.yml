@@ -120,12 +120,12 @@ runs:
         key: ${{ inputs.key }}
         port: ${{ inputs.port }}
         script: |
-          echo "symlinks ${{ steps.symlinks.outputs.symlinks }}"
-          # symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
-          # for key in "${!symlinks[@]}"; do
-          #   value="${symlinks[$key]}"
-          #   echo "Key: $key, Value: $value"
-          # done
+          echo -e "symlinks \n${{ steps.symlinks.outputs.symlinks }}"
+        # symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
+        # for key in "${!symlinks[@]}"; do
+        #   value="${symlinks[$key]}"
+        #   echo "Key: $key, Value: $value"
+        # done
 
         # echo ${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
         # for key in "${!symlinks[@]}"
