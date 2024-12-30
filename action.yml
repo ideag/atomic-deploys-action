@@ -71,12 +71,15 @@ runs:
       with:
         config: ${{ github.workspace }}/config.yml
     - name: use config
-      uses: appleboy/ssh-action@v1.2.0
-      with:
-        host: ${{ inputs.host }}
-        username: ${{ inputs.username }}
-        key: ${{ inputs.key }}
-        port: ${{ inputs.port }}
-        script: |
-          echo ${{ steps.read_config.links[0].source}} ${{ steps.read_config.links[0].target}}
+      run: |
+        echo ${{ steps.read_config.links[0].source}} ${{ steps.read_config.links[0].target}}
+    # - name: use config
+    #   uses: appleboy/ssh-action@v1.2.0
+    #   with:
+    #     host: ${{ inputs.host }}
+    #     username: ${{ inputs.username }}
+    #     key: ${{ inputs.key }}
+    #     port: ${{ inputs.port }}
+    #     script: |
+    #       echo ${{ steps.read_config.links[0].source}} ${{ steps.read_config.links[0].target}}
     
