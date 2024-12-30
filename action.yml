@@ -75,7 +75,7 @@ runs:
             arr[$key]="$value"
         done < <(yq e '.links[] | (.source + "@" + .target)' config.yml)
         
-        declare -A symlinks
+        symlinks='';
         for key in "${!arr[@]}"
         do
             source="${{ inputs.dir }}/$key"
@@ -84,34 +84,34 @@ runs:
             # [[ -d $target ]] || ln -s $source $target
             echo "source: $source"
             echo "target: $target"
-            symlinks[$source]=$target
+            symlinks+="$source::$target\n"
         done
 
-        data="{"
+        # data="{"
         
-        # Iterate through the associative array to build the JSON string
-        first=1
-        for key in "${!symlinks[@]}"; do
-            if [ $first -eq 1 ]; then
-                first=0
-            else
-                data+=","
-            fi
+        # # Iterate through the associative array to build the JSON string
+        # first=1
+        # for key in "${!symlinks[@]}"; do
+        #     if [ $first -eq 1 ]; then
+        #         first=0
+        #     else
+        #         data+=","
+        #     fi
         
-            # Get the value from the array
-            value="${symlinks[$key]}"
+        #     # Get the value from the array
+        #     value="${symlinks[$key]}"
         
-            # Escape quotes in the value using jq (for safe JSON encoding)
-            escaped_value=$(echo "$value" | jq -Rs .)
+        #     # Escape quotes in the value using jq (for safe JSON encoding)
+        #     escaped_value=$(echo "$value" | jq -Rs .)
         
-            # Add the key-value pair to the JSON object
-            data+="\"$key\":$escaped_value"
-        done
+        #     # Add the key-value pair to the JSON object
+        #     data+="\"$key\":$escaped_value"
+        # done
         
-        # Close the JSON object
-        data+="}"
-        echo $data
-        echo "symlinks=$data" >> $GITHUB_OUTPUT      
+        # # Close the JSON object
+        # data+="}"
+        # echo $data
+        echo "symlinks=$symlinks" >> $GITHUB_OUTPUT      
     - name: setup symlinks
       uses: appleboy/ssh-action@v1.2.0
       with:
@@ -120,13 +120,12 @@ runs:
         key: ${{ inputs.key }}
         port: ${{ inputs.port }}
         script: |
-          declare -A symlinks
-          echo "Associative array JSON: ${{ steps.symlinks.outputs.symlinks }}"
-          symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
-          for key in "${!symlinks[@]}"; do
-            value="${symlinks[$key]}"
-            echo "Key: $key, Value: $value"
-          done
+          echo "symlinks ${{ steps.symlinks.outputs.symlinks }}"
+          # symlinks=${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
+          # for key in "${!symlinks[@]}"; do
+          #   value="${symlinks[$key]}"
+          #   echo "Key: $key, Value: $value"
+          # done
 
         # echo ${{ fromJSON( steps.symlinks.outputs.symlinks ) }}
         # for key in "${!symlinks[@]}"
