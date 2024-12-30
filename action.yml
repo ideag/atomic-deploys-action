@@ -86,7 +86,18 @@ runs:
             echo "target: $target"
             symlinks[$source]=$target
         done
-        data = $( jq -c -n '$ARGS.named' --args "${symlinks} )
+        data='{}'
+  
+        for i in "${!symlinks[@]}"
+        do
+            data=$(jq -n --arg data "$data" \
+                         --arg key "$i"     \
+                         --arg value "${symlinks[$i]}" \
+                         '$data | fromjson + { ($key) : ($value) }')
+        done
+        echo $data
+
+        data = $( jq -n --arg rec `$data` '$ARGS.named' )
         echo $data
         echo "symlinks=`$data`" >> $GITHUB_OUTPUT      
       # data='{}'
