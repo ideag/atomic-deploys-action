@@ -79,14 +79,14 @@ runs:
         for key in "${!arr[@]}"
         do
             source="${{ inputs.dir }}/$key"
-            target="${{ inputs.dir }}/${arr[$key]}"
+            target="${{ inputs.dir }}/../${arr[$key]}"
             # echo ([[ -d $target ]])
             # [[ -d $target ]] || ln -s $source $target
             echo "source: $source"
             echo "target: $target"
             symlinks[$source]=$target
         done
-        echo (jo -a "${symlinks[@]}" )
+        echo jo -a "${symlinks[@]}"
         # echo "symlinks=( jo -a \"${symlinks[@]}\" )" >> $GITHUB_OUTPUT
     - name: setup symlinks
       uses: appleboy/ssh-action@v1.2.0
