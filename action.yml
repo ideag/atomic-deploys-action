@@ -73,12 +73,24 @@ runs:
     - name: Use data
       shell: bash
       run: |
-        typeset -A items
-        while IFS== read -r key value; do
-          [ -n "$key" ] && items["$key"]="$value"
-        done < <(echo '${{ steps.yaml-action.outputs.data }}' | jq -r '.links | to_entries | .[] | .source + "=" + .target ')
-        typeset -p items
-        printf "%s\n" "${items[@]}"
+        declare -A arr
+        while IFS="@" read -r key value
+        do
+            arr[$key]="$value"
+        done < <(yq e '.links[] | (.source + "@" + .target)' config.yaml)
+        
+        for key in "${!arr[@]}"
+        do
+            echo "key  : $key"
+            echo "value: ${arr[$key]}"
+        done
+      
+        # typeset -A items
+        # while IFS== read -r key value; do
+        #   [ -n "$key" ] && items["$key"]="$value"
+        # done < <(echo '${{ steps.yaml-action.outputs.data }}' | jq -r '.links | to_entries | .[] | .source + "=" + .target ')
+        # typeset -p items
+        # printf "%s\n" "${items[@]}"
     #    echo '${{ steps.yaml-action.outputs.data }}' | jq '.links[] | .source, .target' | xargs -n2 echo $1 | ( read source target; echo "Source:$source Target:$target" )
     #    echo "{\"links\":[{\"a\":\"b\",\"c\":\"d\"},{\"e\":\"b\",\"f\":\"d\"}]}" | jq '.links[] | @sh'
     #   echo "${{ steps.yaml-action.outputs.data }}" | jq '.links[]'
