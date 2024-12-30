@@ -97,7 +97,7 @@ runs:
                          '$data | fromjson + { ($key) : ($value) }')
         done
         echo $data
-        echo `symlinks=$data` >> $GITHUB_OUTPUT      
+        echo "symlinks=`$data`" >> $GITHUB_OUTPUT      
       # echo $( jq -c -n '$ARGS.positional' --args "${symlinks[@]} )
     - name: setup symlinks
       uses: appleboy/ssh-action@v1.2.0
