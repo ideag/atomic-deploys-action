@@ -73,9 +73,9 @@ runs:
     - name: Use data
       shell: bash
       run: |
+        echo "${{ steps.yaml-action.outputs.data }}"
     #    echo "{\"links\":[{\"a\":\"b\",\"c\":\"d\"},{\"e\":\"b\",\"f\":\"d\"}]}" | jq '.links[] | @sh'
     #   echo "${{ steps.yaml-action.outputs.data }}" | jq '.links[]'
-        echo "${{ steps.yaml-action.outputs.data }}"
     # - name: read config
     #   uses: pietrobolcato/action-read-yaml@1.1.0
     #   id: read_config
