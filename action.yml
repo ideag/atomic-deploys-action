@@ -83,7 +83,7 @@ runs:
         do
             source="${{ inputs.dir }}/$key"
             target=realpath "${{ inputs.dir }}/../${arr[$key]}"
-            echo ([[ -d $target ]])
+            # echo ([[ -d $target ]])
             # [[ -d $target ]] || ln -s $source $target
             echo "source: $source"
             echo "target: $target"
