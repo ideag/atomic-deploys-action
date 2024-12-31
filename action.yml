@@ -120,8 +120,8 @@ runs:
         key: ${{ inputs.key }}
         port: ${{ inputs.port }}
         script: |
+          echo ${{ steps.symlinks.outputs.ITEMS }}
           items = ${{ steps.symlinks.outputs.ITEMS }}
-          
           IFS="|||" read -ra parts <<< "$items"
           for part in "${parts[@]}"; do
             if [ -z "$part" ]; then
