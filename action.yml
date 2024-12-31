@@ -111,7 +111,7 @@ runs:
         # # Close the JSON object
         # data+="}"
         # echo $data
-        echo "symlinks='$symlinks'" >> $GITHUB_OUTPUT      
+        echo "items='$symlinks'" >> $GITHUB_OUTPUT      
     - name: setup symlinks
       uses: appleboy/ssh-action@v1.2.0
       with:
@@ -120,9 +120,9 @@ runs:
         key: ${{ inputs.key }}
         port: ${{ inputs.port }}
         script: |
-          symlinks = ${{ steps.symlinks.outputs.symlinks }}
+          items = ${{ steps.symlinks.outputs.items }}
           
-          IFS="|||" read -ra parts <<< "$symlinks"
+          IFS="|||" read -ra parts <<< "$items"
           for part in "${parts[@]}"; do
             if [ -z "$part" ]; then
               continue  # Skip this iteration if the string is empty
