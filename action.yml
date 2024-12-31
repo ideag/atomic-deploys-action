@@ -111,7 +111,7 @@ runs:
         # # Close the JSON object
         # data+="}"
         # echo $data
-        echo "items='$symlinks'" >> $GITHUB_OUTPUT      
+        echo "ITEMS='$symlinks'" >> $GITHUB_OUTPUT      
     - name: setup symlinks
       uses: appleboy/ssh-action@v1.2.0
       with:
@@ -120,7 +120,7 @@ runs:
         key: ${{ inputs.key }}
         port: ${{ inputs.port }}
         script: |
-          items = ${{ steps.symlinks.outputs.items }}
+          items = ${{ steps.symlinks.outputs.ITEMS }}
           
           IFS="|||" read -ra parts <<< "$items"
           for part in "${parts[@]}"; do
