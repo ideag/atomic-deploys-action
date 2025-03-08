@@ -1,5 +1,5 @@
-name: 'Hello World'
-description: 'Greet someone'
+name: 'Atomic deploy'
+description: 'Testing atomic deploy'
 inputs:
   host:  # id of input
     description: 'SSH server hostname'
